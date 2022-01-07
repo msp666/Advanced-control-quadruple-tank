@@ -27,7 +27,7 @@ Wu = blkdiag(Wu, Wu);
 % omBT = 0.1;
 % WT = makeweight(dcgain_T, [omBT, 0.2], hfgain_T);
 % WT = 1000*s/(s+2) * (s+0.3)/(s+10);
-WT = 10*s/(s+0.1);
+WT = 10*s/(s+0.01);
 bodemag(WT);
 legend('Wp', 'WT')
 WT = blkdiag(WT, WT);

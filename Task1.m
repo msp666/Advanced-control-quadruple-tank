@@ -15,7 +15,7 @@ for i = 1:length(Gpoles)
     % Input direction
     poles_direction{i, 1} = V(:, 1);
     % Output direction
-    poles_direction{i, 2} = U(:, 2);  
+    poles_direction{i, 2} = U(:, 1);  
 end
 
 zeros_direction = cell(length(Gzeros), 2);

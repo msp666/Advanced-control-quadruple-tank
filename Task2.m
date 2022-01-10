@@ -104,23 +104,28 @@ DeltaI = ultidyn('DeltaI', [2, 2], 'Bound', 1);
 Gpdyn_cl = feedback(G*(eye(2) + WI*DeltaI)*K, [1,0;0,1]);
 
 %% T2.3 check the robust stability of dynamic uncertainty
-[stabmarg, mcu] = robstab(Gpdyn_cl);
-TWhinfnorm = hinfnorm(Gtf_cl*WI);
-
-if stabmarg.LowerBound >= 1
+[margin_dyn, wcu_dyn] = robstab(Gpdyn_cl);
+if margin_dyn.LowerBound >= 1
     disp('The system is robustly stable');
 else
     warning('The system is not robustly stable');
 end
 
 %% T2.4 robust stability of paramatric uncertainty
-[N, Delta] = lftdata(Gp_cl);
-n = length(Delta.NominalValue);
-Ntf = tf(minreal(N));
-M = Ntf(1:n, 1:n);
-M_hinfnorm = hinfnorm(M);
-if M_hinfnorm < 1
-    disp('This system is robustly stable');
+
+[margin_para, wcu_para] = robstab(Gp_cl);
+if margin_para.LowerBound >= 1
+    disp('The system is robustly stable');
 else
-    warning('This system is not robustly stable');
+    warning('The system is not robustly stable');
 end
+% [N, Delta] = lftdata(Gp_cl);
+% n = length(Delta.NominalValue);
+% Ntf = tf(minreal(N));
+% M = Ntf(1:n, 1:n);
+% M_hinfnorm = hinfnorm(M);
+% if M_hinfnorm < 1
+%     disp('This system is robustly stable');
+% else
+%     warning('This system is not robustly stable');
+% end

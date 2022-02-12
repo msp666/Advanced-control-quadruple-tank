@@ -1,4 +1,4 @@
-%% Given INCOMPLETE solution script for the quadtank coursework
+%% Question 1 solution script for the quadtank coursework (non-minimal phase)
 clearvars
 model = 'nlQuadtank';
 % Cross sectional area of tank 
@@ -21,24 +21,31 @@ par(1) = struct('h10',12.1,'h20',12.6,'h30',2.5,'h40',2.49,'v10',2.99,'v20',2.97
 % Nonminimum phase
 par(2) = struct('h10',6.79,'h20',8.78,'h30',2.97,'h40',4.17,'v10',2.53,'v20',2.35,'k1',3.14, 'k2', 3.29, 'g1',0.35,'g2',0.3);
 
-% Minimum phase
-h10 = par(1).h10;
-h20 = par(1).h20;
-h30 = par(1).h30;
-h40 = par(1).h40;
-k1 = par(1).k1;
-k2 = par(1).k2;
-g1 = par(1).g1;
-g2 = par(1).g2;
+% Non Minimum phase
+h10 = par(2).h10;
+h20 = par(2).h20;
+h30 = par(2).h30;
+h40 = par(2).h40;
+k1 = par(2).k1;
+k2 = par(2).k2;
+g1 = par(2).g1;
+g2 = par(2).g2;
 op_spec = operspec(model);
-op_spec.Inputs(1).u = [par(1).v10; par(1).v20];  
+set(op_spec.Inputs(1), 'Known', [false; false])
+op_spec.Inputs(1).u = [par(2).v10; par(2).v20];  
+
 % Allow only positive voltages
 op_spec.Inputs(1).Min = zeros(2,1); 
 % Define states
-set(op_spec.State(1), 'x', 1);
-set(op_spec.State(1), 'Known', true);    
+
+set(op_spec.States(1), 'x', h10)
+set(op_spec.States(2), 'x', h20)
+set(op_spec.States(3), 'x', h30)
+set(op_spec.States(4), 'x', h40)
+set(op_spec.States(:), 'Known', false); 
+   
 [op, op_report] = findop(model, op_spec);    
-G = linearize(model,getlinio(model),op(1));
+sys_np = linearize(model,getlinio(model),op);
 U0 = op_report.Inputs(1).u;
 X0 = [op_report.States(1).x; op_report.States(2).x; op_report.States(3).x; op_report.States(4).x];
 Y0 = op_report.Outputs(1).y;

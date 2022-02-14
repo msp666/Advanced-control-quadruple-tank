@@ -114,7 +114,7 @@ title('Weighting of dynamic uncertainty for non-minimum phase system');
 DeltaM_n = ultidyn('DeltaM_n', [2, 2], 'Bound', 1);
 % Additive uncertainty
 Gp_n = G_n + WM_n * DeltaM_n;
-%Gp = G*(eye(2) + WM*DeltaM);
+%Gp_n = G_n*(eye(2) + WM_n*DeltaM_n);
 L_n = Gp_n * K_n;
 T_n = feedback(L_n ,[1 0;0 1]);
 [stabmarg_n,wcu_n] = robstab(T_n);
